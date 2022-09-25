@@ -1,16 +1,12 @@
 # pp_edtech
 
-A new Flutter project.
+It's full form is "Procrastinator-Proof education technology" 😛
+Imagine you started studying and after few mins, you ended up procrastinating by watching other videos 😢
+we all have been there. This is an attempt to solve this issue
+
+## How to download apk?
+It's available in releases page. :)
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+If you wanna run this app just install all pub dependencies and run `flutter run` and boom! 🎉
