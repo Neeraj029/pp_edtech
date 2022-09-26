@@ -6,8 +6,21 @@ import "package:youtube_player_flutter/youtube_player_flutter.dart";
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import "package:firebase_analytics/firebase_analytics.dart";
+import "package:firebase_analytics/observer.dart";
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+// import 'package:firebase_analytics/'
 
-void main() => runApp(MaterialApp(home: MyApp()));
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+  runApp(MaterialApp(home: MyApp()));
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -45,7 +58,11 @@ class _MyAppState extends State<MyApp> {
       // }
     }
     setState(() {
-      dropdownValue = channelItemsName[0];
+      if (channelItemsName.isEmpty) {
+        dropdownValue = "Add a channel";
+      } else {
+        dropdownValue = channelItemsName[0];
+      }
     });
   }
 
@@ -66,6 +83,9 @@ class _MyAppState extends State<MyApp> {
       content: Row(
         children: [
           Text(
+            // check if message is larger than 15 characters
+            // if it is, then show only first 15 characters
+            // else show the whole message
             message,
             style: GoogleFonts.inter(fontSize: 18, color: Colors.black),
           ),
@@ -147,6 +167,9 @@ class _MyAppState extends State<MyApp> {
                       ),
                       onPressed: () async {
                         // do some shit idk
+                        FirebaseAnalytics.instance.logEvent(
+                            name: "add_channel",
+                            parameters: {"channel_id": taskName.text});
                         var channelInfo;
                         try {
                           channelInfo = await fetchChannelName(taskName.text);
@@ -180,8 +203,16 @@ class _MyAppState extends State<MyApp> {
                             channelItemsName.add(channelName);
                             dropdownValue = channelName;
                           });
-                          returnSnacks(context, "${channelName} added",
-                              Color.fromARGB(255, 31, 240, 115), Icons.check);
+                          // check if channel name character length is greater than 15
+                          // if it is, then show only first 15 characters
+                          // else show the whole name
+                          returnSnacks(
+                              context,
+                              "${channelName.length > 15 ? channelName.substring(0, 15) + "..." + " Added" : channelName + "Added"}",
+                              Color.fromARGB(255, 31, 240, 115),
+                              Icons.check);
+                          // returnSnacks(context, "${channelName} added",
+                          // Color.fromARGB(255, 31, 240, 115), Icons.check);
 
                           Navigator.pop(context);
                           // print(prefs.getStringList("channels"));
@@ -260,12 +291,23 @@ class _MyAppState extends State<MyApp> {
                         items?.remove(channelItems[channelItemsNameSingle]);
                         prefs.setStringList(key, items!);
                         print(prefs.getStringList('channels'));
-
+                        //
                         setState(() {
                           channelItemsName.remove(channelItemsNameSingle);
                           channelItems.remove(channelItemsNameSingle);
-                          dropdownValue = channelItemsName[0];
+                          if (channelItemsName.isEmpty) {
+                            dropdownValue = "Select a channel";
+                          } else {
+                            dropdownValue = channelItemsName[0];
+                          }
                         });
+
+                        returnSnacks(
+                            context,
+                            "${channelItemsNameSingle.length > 15 ? channelItemsNameSingle.substring(0, 15) + "..." + " removed" : channelItemsNameSingle + "removed"}",
+                            Color.fromARGB(255, 222, 65, 54),
+                            Icons.check);
+
                         Navigator.pop(context);
                       },
                     ),
@@ -360,7 +402,12 @@ class _MyAppState extends State<MyApp> {
               ? Text("")
               : DropdownButton(
                   // Initial Value
-                  value: dropdownValue!,
+                  // check if dropdownValue is empty or not
+                  // if it is empty then show the first item in the list
+                  // else show the dropdownValue
+                  value:
+                      dropdownValue == "" ? channelItemsName[0] : dropdownValue,
+                  // value: dropdownValue,
                   style: GoogleFonts.inter(
                     fontSize: 15,
                     color: Colors.white,

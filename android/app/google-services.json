@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "360621076334",
+    "project_id": "pp-edtech",
+    "storage_bucket": "pp-edtech.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360621076334:android:c49ad5e1909867ec855b7f",
+        "android_client_info": {
+          "package_name": "com.example.pp_edtech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "360621076334-df776gou3tstifq3k11lau0lq4bgfsjl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1cK21rJcyK410P71zAWTf4f6W_fhgGOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "360621076334-df776gou3tstifq3k11lau0lq4bgfsjl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
